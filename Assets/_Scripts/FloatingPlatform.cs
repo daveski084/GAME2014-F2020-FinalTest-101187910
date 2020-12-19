@@ -7,7 +7,7 @@
 *
 * Date created       : 20/12/19
 *
-* Description        : Controls exit gate logic.
+* Description        : Controls shrinking platform logic.
 *
 * Last modified      : 20/12/19
 *
@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-/** Moves the platform back and forth. */
+/** Controls the platform. */
 public class FloatingPlatform : MonoBehaviour
 {
     public AudioSource shrinkSound;
@@ -45,14 +45,20 @@ public class FloatingPlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        /** Makes the platform "float". */
         _toggle();
 
+
+        /** Shrinks the platform. */
         if (isOn && this.transform.localScale.x >=0.1)
         {
             this.transform.localScale = this.transform.localScale -= new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
             playSound = false;
         }
 
+
+        /** Grows the platform. */
         else if (!isOn && this.transform.localScale.x <= 2.4)
         {
             this.transform.localScale = this.transform.localScale += new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
@@ -72,6 +78,8 @@ public class FloatingPlatform : MonoBehaviour
 
     }
 
+
+    /** Shrink sound. */
     public void OnCollisionEnter2D(Collision2D collision)
     {
         shrinkSound.Play();
