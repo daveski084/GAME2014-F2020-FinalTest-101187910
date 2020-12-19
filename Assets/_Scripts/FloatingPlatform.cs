@@ -31,7 +31,7 @@ public class FloatingPlatform : MonoBehaviour
     public Vector3 startPOS;
     public Vector3 reset;
     private bool isOn;
-    private bool timeToGrow  = true;
+    private bool playSound;
 
     void Start()
     {
@@ -48,16 +48,22 @@ public class FloatingPlatform : MonoBehaviour
         if (isOn && this.transform.localScale.x >=0.1)
         {
             this.transform.localScale = this.transform.localScale -= new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
+            playSound = false;
         }
 
         else if (!isOn && this.transform.localScale.x <= 2.4)
         {
             this.transform.localScale = this.transform.localScale += new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
 
-            if (this.transform.localScale.x >= 2.5)
+            if (this.transform.localScale.x >= 2.4)
+            {
+                playSound = true;
+                this.transform.localScale = new Vector3(2.5f, 2f, 0);
+            }
+
+            if(playSound)
             {
                 resetSound.Play();
-                this.transform.localScale = new Vector3(2.5f, 2f, 0);
             }
         }
 
