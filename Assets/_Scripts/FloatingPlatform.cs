@@ -21,6 +21,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/** Moves the platform back and forth. */
 public class FloatingPlatform : MonoBehaviour
 {
     public AudioSource shrinkSound;
