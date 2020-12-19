@@ -27,28 +27,63 @@ public class FloatingPlatform : MonoBehaviour
     public AudioSource resetSound;
     public Vector3 groundLevel;
     public Rigidbody2D rb;
-
+    public GameObject platform;
+    public Vector3 startPOS;
+    public Vector3 reset;
+    private bool isOn;
+    private bool timeToGrow  = true;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        startPOS = transform.localScale;
+        reset = new Vector3(0, 0, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
         _toggle();
+
+        if (isOn && this.transform.localScale.x >=0.1)
+        {
+            this.transform.localScale = this.transform.localScale -= new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
+        }
+
+        else if (!isOn && this.transform.localScale.x <= 2.4)
+        {
+            this.transform.localScale = this.transform.localScale += new Vector3(0.5f, 0.5f, 0) * Time.deltaTime;
+
+            if (this.transform.localScale.x >= 2.5)
+            {
+                resetSound.Play();
+                this.transform.localScale = new Vector3(2.5f, 2f, 0);
+            }
+        }
+
+
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        shrinkSound.Play();
     }
 
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            shrinkSound.Play();
-            Destroy(gameObject);
+           isOn = true;
+           //shrinkSound.Play();
         }
     }
+
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        isOn = false;
+    }
+
 
     private void _toggle()
     {
